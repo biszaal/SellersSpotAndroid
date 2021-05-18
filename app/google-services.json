@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "614484553778",
+    "firebase_url": "https://sellers-spot.firebaseio.com",
+    "project_id": "sellers-spot",
+    "storage_bucket": "sellers-spot.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:614484553778:android:843ae9da04ace3daa70c2b",
+        "android_client_info": {
+          "package_name": "com.biszaal.sellersspot"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "614484553778-0fr399461cfs6dsdnb607eo0k8e82482.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDc_4rikUJB65azUSB2NeKeRguOBJAaBsI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "614484553778-0fr399461cfs6dsdnb607eo0k8e82482.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "614484553778-d86l5ouskktvftqtv1bsefljn7ss2o9n.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "biszaal.Sellers-spot"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

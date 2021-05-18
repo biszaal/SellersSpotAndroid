@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".Fragments.Home">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_postsView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="64dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_marginTop="-12dp"
+        android:background="@color/primary_color">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="250dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="20dp"
+            android:alpha="0.5"
+            app:cardCornerRadius="64dp"
+            android:elevation="5dp"
+            android:background="@color/white">
+
+            <SearchView
+                android:id="@+id/sv_searchBar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </androidx.cardview.widget.CardView>
+    </LinearLayout>
+
+</FrameLayout>
