@@ -13,15 +13,18 @@ import com.biszaal.sellersspot.Post
 import com.biszaal.sellersspot.R
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
 
-class Home : Fragment()
-{
+class Home : Fragment() {
     private lateinit var sv_searchBar: SearchView
     private lateinit var rv_postsView: RecyclerView
+
+    private lateinit var database: DatabaseReference
+    private lateinit var postList: MutableList<Post>
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,24 +49,44 @@ class Home : Fragment()
     }
 
 
-    private fun loadPost()
-    {
+    private fun loadPost() {
+        postList = mutableListOf()
+        database = Firebase.database.reference.child("posts")
 
-        val postListener = object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot)
-            {
-                val post = snapshot.getValue<Post>()
-                Log.i("firebase", "Got value $post")
-            }
+        database.addValueEventListener(
+            object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    // check if data exists or not
+                    if (snapshot!!.exists()) {
+                        for (child in snapshot.children) {
+                            val post = child.getValue() as HashMap<*, *>
+                            val postClass = Post()
+                            with(postClass)
+                            {
+                                id = child.key.toString()
+                                userId = post ["userId"].toString()
+                                postName = post ["postName"].toString()
+                                postImage = post ["postImage"] as List<String>?
+                                postDescription = post ["postDescription"].toString()
+                                postPrice = post ["postPrice"].toString()
+                                postLocation = post ["postLocation"].toString()
+                                postDate = post ["postDate"].toString()
+                                postLike = post ["postLike"] as Map<String, String>?
+                                postDislike = post ["postDislike"] as Map<String, String>?
 
-            override fun onCancelled(error: DatabaseError)
-            {
-                Log.w(TAG, "loadPost:onCancelled", error.toException())
-            }
+                            }
+                            postList.add(postClass)
+                            Log.i(TAG, "got value ${postList}")
+                        }
+                    }
+                }
 
-        }
+                override fun onCancelled(error: DatabaseError) {
+                    Log.w(TAG, "loadPost:onCancelled", error.toException())
+                }
 
-        print(postListener)
+            })
+        print(postList)
     }
 
 }
