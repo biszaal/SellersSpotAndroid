@@ -6,9 +6,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.SearchView
+import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
+import com.biszaal.sellersspot.EachPostView
 import com.biszaal.sellersspot.Post
 import com.biszaal.sellersspot.R
 import com.google.firebase.database.DataSnapshot
@@ -16,15 +17,14 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
-import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
 
 class Home : Fragment() {
-    private lateinit var sv_searchBar: SearchView
+    private lateinit var et_searchBar: EditText
     private lateinit var rv_postsView: RecyclerView
 
     private lateinit var database: DatabaseReference
-    private lateinit var postList: MutableList<Post>
+    private lateinit var postList: ArrayList<Post>
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,24 +33,23 @@ class Home : Fragment() {
     ): View? {
 
         val view: View = inflater.inflate(R.layout.fragment_home, container, false)
-
-        sv_searchBar = view.findViewById(R.id.sv_searchBar)
+        
+        et_searchBar = view.findViewById(R.id.et_searchBar)
         rv_postsView = view.findViewById(R.id.rv_postsView)
-
-        sv_searchBar.onActionViewExpanded()
-        sv_searchBar.queryHint = "Search"
         return view
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        val list_of_posts = ArrayList<Post>()
+
         loadPost()
     }
 
 
     private fun loadPost() {
-        postList = mutableListOf()
+        postList = ArrayList<Post>()
         database = Firebase.database.reference.child("posts")
 
         database.addValueEventListener(

@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="primary_color">#FF8800</color>
-    <color name="primary_color_dark">#B35F00</color>
-    <color name="button_color">#00B4FF</color>
-    <color name="button_color_dark">#007EB3</color>
+    <color name="primary_color">#00B4FF</color>
+    <color name="primary_color_dark">#007EB3</color>
+    <color name="button_color">#FF8800</color>
+    <color name="button_color_dark">#B35F00</color>
+    <color name="secondary_color">#80808080</color>
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
     <color name="purple_700">#FF3700B3</color>
