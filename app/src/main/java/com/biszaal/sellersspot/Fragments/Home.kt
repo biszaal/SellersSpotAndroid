@@ -8,16 +8,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.biszaal.sellersspot.EachPostView
 import com.biszaal.sellersspot.Post
 import com.biszaal.sellersspot.R
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.*
 
 class Home : Fragment() {
     private lateinit var et_searchBar: EditText
@@ -33,59 +32,42 @@ class Home : Fragment() {
     ): View? {
 
         val view: View = inflater.inflate(R.layout.fragment_home, container, false)
-        
+
         et_searchBar = view.findViewById(R.id.et_searchBar)
         rv_postsView = view.findViewById(R.id.rv_postsView)
+
+        rv_postsView.setHasFixedSize(true)
+
+        postList = arrayListOf<Post>()
+        loadPost()
+
         return view
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    fun loadPost() {
+        database = FirebaseDatabase.getInstance().getReference("posts")
 
-        val list_of_posts = ArrayList<Post>()
-
-        loadPost()
-    }
-
-
-    private fun loadPost() {
-        postList = ArrayList<Post>()
-        database = Firebase.database.reference.child("posts")
-
-        database.addValueEventListener(
-            object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    // check if data exists or not
-                    if (snapshot!!.exists()) {
-                        for (child in snapshot.children) {
-                            val post = child.getValue() as HashMap<*, *>
-                            val postClass = Post()
-                            with(postClass)
-                            {
-                                id = child.key.toString()
-                                userId = post ["userId"].toString()
-                                postName = post ["postName"].toString()
-                                postImage = post ["postImage"] as List<String>?
-                                postDescription = post ["postDescription"].toString()
-                                postPrice = post ["postPrice"].toString()
-                                postLocation = post ["postLocation"].toString()
-                                postDate = post ["postDate"].toString()
-                                postLike = post ["postLike"] as Map<String, String>?
-                                postDislike = post ["postDislike"] as Map<String, String>?
-
+            database.addValueEventListener(
+                object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        // check if data exists or not
+                        if (snapshot!!.exists()) {
+                            for (child in snapshot.children) {
+                                val post = child.getValue(Post::class.java)
+                                postList.add(post!!)
                             }
-                            postList.add(postClass)
-                            Log.i(TAG, "got value ${postList}")
+
+                            Log.i(TAG,"Got Value $postList")
+
+                            rv_postsView.adapter = EachPostView(postList)
                         }
                     }
-                }
 
-                override fun onCancelled(error: DatabaseError) {
-                    Log.w(TAG, "loadPost:onCancelled", error.toException())
-                }
+                    override fun onCancelled(error: DatabaseError) {
+                        Log.w(TAG, "loadPost:onCancelled", error.toException())
+                    }
 
-            })
-        print(postList)
+                })
     }
 
 }
